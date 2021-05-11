@@ -82,6 +82,7 @@ message E2eApiTransResponse {
 message E2eApiCloseRequest {
     string session_id = 1;
 
+    // If true, terminate the session immediately without waiting for the remaining audio data.
     bool wait_to_drain = 2;
 }
 
