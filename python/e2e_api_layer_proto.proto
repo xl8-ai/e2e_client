@@ -1,0 +1,132 @@
+syntax = "proto3";
+
+package e2e_pipe.api;
+
+// TODO: Uncomment the following for gRPC-gateway support.
+// import "google/api/annotations.proto";
+
+enum ApiType {
+    SPEECH_TO_SPEECH = 0;
+    SPEECH_TO_TEXT = 1;
+    TEXT_TO_SPEECH = 2;
+}
+
+enum Timeliness {
+    REALTIME = 0;
+    // This may mean faster or slower than real-time.
+    NON_REALTIME = 1;
+}
+
+message E2eApiData {
+    oneof data {
+        bytes audio = 1;
+        string text = 2;
+    }
+}
+
+enum E2eApiResponseType {
+    E2E_API_RESPONSE_SUCCESS = 0;
+    E2E_API_RESPONSE_ERROR = 1;
+}
+
+message E2eApiTextDataFormat {
+}
+
+message E2eApiAudioDataFormat {
+    uint32 sample_rate = 1;
+    uint32 channels = 2;
+}
+
+message E2eApiDataFormat {
+    string language_code = 1;
+    oneof format {
+        E2eApiTextDataFormat text_format = 2;
+        E2eApiAudioDataFormat audio_format = 3;
+    }
+}
+
+message E2eApiInitRequest {
+    string client_id = 1;
+    string credential = 2;
+    ApiType api_type = 3;
+    Timeliness timeliness = 4;
+
+    E2eApiDataFormat source_data_format = 5;
+    E2eApiDataFormat target_data_format = 6;
+}
+
+message E2eApiInitResponse {
+    string session_id = 1;
+
+    E2eApiResponseType type = 2;
+    // The detailed error message filled only when type == E2eApiResponseType.E2E_API_RESPONSE_ERROR.
+    string error_message = 3;
+}
+
+message E2eApiTransRequest {
+    string session_id = 1;
+
+    E2eApiData data = 2;
+}
+
+message E2eApiTransResponse {
+    string session_id = 1;
+
+    E2eApiResponseType type = 2;
+    // The detailed error message filled only when type == E2eApiResponseType.E2E_API_RESPONSE_ERROR.
+    string error_message = 3;
+
+    E2eApiData data = 4;
+}
+
+message E2eApiCloseRequest {
+    string session_id = 1;
+
+    bool wait_to_drain = 2;
+}
+
+message E2eApiCloseResponse {
+    string session_id = 1;
+
+    E2eApiResponseType type = 2;
+    // The detailed error message filled only when type == E2eApiResponseType.E2E_API_RESPONSE_ERROR.
+    string error_message = 3;
+
+    E2eApiData data = 4;
+}
+
+// A service that Speech-to-Speech API layer will serve.
+service E2eApiService {
+    // Initialize the API service.
+    rpc InitE2e(E2eApiInitRequest) returns (E2eApiInitResponse) {
+        // TODO: Uncomment the following for gRPC-gateway support.
+        /*
+        option (google.api.http) = {
+            post: "/v1/e2e/init"
+            body: "*"
+        };
+        */
+    }
+
+    // Process a translation request.
+    rpc TransE2e(E2eApiTransRequest) returns (E2eApiTransResponse) {
+        // TODO: Uncomment the following for gRPC-gateway support.
+        /*
+        option (google.api.http) = {
+            post: "/v1/e2e/trans"
+            body: "*"
+        };
+        */
+    }
+
+    // Close the API service.
+    rpc CloseE2e(E2eApiCloseRequest) returns (E2eApiCloseResponse) {
+        // TODO: Uncomment the following for gRPC-gateway support.
+        /*
+        option (google.api.http) = {
+            post: "/v1/e2e/close"
+            body: "*"
+        };
+        */
+    }
+}
