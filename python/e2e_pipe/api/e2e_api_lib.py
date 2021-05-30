@@ -16,24 +16,25 @@ class Xl8E2eApiClient:
     SPEECH_TO_SPEECH = 1
     SPEECH_TO_TEXT = 2
 
-    def __init__(self, address: str, port: int, mode: int = SPEECH_TO_SPEECH) -> None:
+    def __init__(self, address: str, port: int, source_lang: str, target_lang: str,
+                 client_id: str, mode: int = SPEECH_TO_SPEECH) -> None:
         """Initialize E2eApiClient."""
         channel = grpc.insecure_channel(f"{address}:{port}")
         self.stub = E2eApiServiceStub(channel)
         if mode == Xl8E2eApiClient.SPEECH_TO_SPEECH:
-            request = E2eApiInitRequest(client_id="no-sis", api_type=ApiType.SPEECH_TO_SPEECH, timeliness=Timeliness.REALTIME)
-            request.source_data_format.language_code = "en"
+            request = E2eApiInitRequest(client_id=client_id, api_type=ApiType.SPEECH_TO_SPEECH, timeliness=Timeliness.REALTIME)
+            request.source_data_format.language_code = source_lang
             request.source_data_format.audio_format.sample_rate = 16000
             request.source_data_format.audio_format.channels = 1
-            request.target_data_format.language_code = "ko"
+            request.target_data_format.language_code = target_lang
             request.target_data_format.audio_format.sample_rate = 16000
             request.target_data_format.audio_format.channels = 1
         elif mode == Xl8E2eApiClient.SPEECH_TO_TEXT:
-            request = E2eApiInitRequest(client_id="no-sis", api_type=ApiType.SPEECH_TO_TEXT, timeliness=Timeliness.INTERPRETING)
-            request.source_data_format.language_code = "ko"
+            request = E2eApiInitRequest(client_id=client_id, api_type=ApiType.SPEECH_TO_TEXT, timeliness=Timeliness.INTERPRETING)
+            request.source_data_format.language_code = source_lang
             request.source_data_format.audio_format.sample_rate = 16000
             request.source_data_format.audio_format.channels = 1
-            request.target_data_format.language_code = "en"
+            request.target_data_format.language_code = target_lang
 
         response = self.stub.InitE2e(request)
         if response.type != E2eApiResponseType.E2E_API_RESPONSE_SUCCESS:

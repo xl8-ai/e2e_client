@@ -10,7 +10,8 @@ CHUNK = 2048
 SAMPLE_WIDTH = 2
 SAMPLE_RATE = 16000
 
-xl8_client = Xl8E2eApiClient("localhost", 17777, Xl8E2eApiClient.SPEECH_TO_TEXT)
+xl8_client = Xl8E2eApiClient("localhost", 17777, source_lang="en", target_lang="ko",
+                             client_id="stt-demo", mode=Xl8E2eApiClient.SPEECH_TO_TEXT)
 
 # instantiate PyAudio (1)
 p = pyaudio.PyAudio()

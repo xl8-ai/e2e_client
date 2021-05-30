@@ -12,7 +12,7 @@ if len(sys.argv) < 2:
     print("Plays a wave file.\n\nUsage: %s filename.wav" % sys.argv[0])
     sys.exit(-1)
 
-xl8_client = Xl8E2eApiClient("localhost", 17777)
+xl8_client = Xl8E2eApiClient("localhost", 17777, source_lang="en", target_lang="ko", client_id="sis")
 
 wf = wave.open(sys.argv[1], 'rb')
 
