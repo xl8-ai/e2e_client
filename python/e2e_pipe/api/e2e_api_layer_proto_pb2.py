@@ -20,7 +20,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n&e2e_pipe/api/e2e_api_layer_proto.proto\x12\x0c\x65\x32\x65_pipe.api\"5\n\nE2eApiData\x12\x0f\n\x05\x61udio\x18\x01 \x01(\x0cH\x00\x12\x0e\n\x04text\x18\x02 \x01(\tH\x00\x42\x06\n\x04\x64\x61ta\"\x16\n\x14\x45\x32\x65\x41piTextDataFormat\">\n\x15\x45\x32\x65\x41piAudioDataFormat\x12\x13\n\x0bsample_rate\x18\x01 \x01(\r\x12\x10\n\x08\x63hannels\x18\x02 \x01(\r\"\xab\x01\n\x10\x45\x32\x65\x41piDataFormat\x12\x15\n\rlanguage_code\x18\x01 \x01(\t\x12\x39\n\x0btext_format\x18\x02 \x01(\x0b\x32\".e2e_pipe.api.E2eApiTextDataFormatH\x00\x12;\n\x0c\x61udio_format\x18\x03 \x01(\x0b\x32#.e2e_pipe.api.E2eApiAudioDataFormatH\x00\x42\x08\n\x06\x66ormat\"\x89\x02\n\x11\x45\x32\x65\x41piInitRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x12\n\ncredential\x18\x02 \x01(\t\x12\'\n\x08\x61pi_type\x18\x03 \x01(\x0e\x32\x15.e2e_pipe.api.ApiType\x12,\n\ntimeliness\x18\x04 \x01(\x0e\x32\x18.e2e_pipe.api.Timeliness\x12:\n\x12source_data_format\x18\x05 \x01(\x0b\x32\x1e.e2e_pipe.api.E2eApiDataFormat\x12:\n\x12target_data_format\x18\x06 \x01(\x0b\x32\x1e.e2e_pipe.api.E2eApiDataFormat\"o\n\x12\x45\x32\x65\x41piInitResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12.\n\x04type\x18\x02 \x01(\x0e\x32 .e2e_pipe.api.E2eApiResponseType\x12\x15\n\rerror_message\x18\x03 \x01(\t\"P\n\x12\x45\x32\x65\x41piTransRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12&\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x18.e2e_pipe.api.E2eApiData\"\x98\x01\n\x13\x45\x32\x65\x41piTransResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12.\n\x04type\x18\x02 \x01(\x0e\x32 .e2e_pipe.api.E2eApiResponseType\x12\x15\n\rerror_message\x18\x03 \x01(\t\x12&\n\x04\x64\x61ta\x18\x04 \x01(\x0b\x32\x18.e2e_pipe.api.E2eApiData\"?\n\x12\x45\x32\x65\x41piCloseRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x15\n\rwait_to_drain\x18\x02 \x01(\x08\"\x98\x01\n\x13\x45\x32\x65\x41piCloseResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12.\n\x04type\x18\x02 \x01(\x0e\x32 .e2e_pipe.api.E2eApiResponseType\x12\x15\n\rerror_message\x18\x03 \x01(\t\x12&\n\x04\x64\x61ta\x18\x04 \x01(\x0b\x32\x18.e2e_pipe.api.E2eApiData*G\n\x07\x41piType\x12\x14\n\x10SPEECH_TO_SPEECH\x10\x00\x12\x12\n\x0eSPEECH_TO_TEXT\x10\x01\x12\x12\n\x0eTEXT_TO_SPEECH\x10\x02*,\n\nTimeliness\x12\x0c\n\x08REALTIME\x10\x00\x12\x10\n\x0cNON_REALTIME\x10\x01*N\n\x12\x45\x32\x65\x41piResponseType\x12\x1c\n\x18\x45\x32\x45_API_RESPONSE_SUCCESS\x10\x00\x12\x1a\n\x16\x45\x32\x45_API_RESPONSE_ERROR\x10\x01\x32\x85\x02\n\rE2eApiService\x12N\n\x07InitE2e\x12\x1f.e2e_pipe.api.E2eApiInitRequest\x1a .e2e_pipe.api.E2eApiInitResponse\"\x00\x12Q\n\x08TransE2e\x12 .e2e_pipe.api.E2eApiTransRequest\x1a!.e2e_pipe.api.E2eApiTransResponse\"\x00\x12Q\n\x08\x43loseE2e\x12 .e2e_pipe.api.E2eApiCloseRequest\x1a!.e2e_pipe.api.E2eApiCloseResponse\"\x00\x62\x06proto3'
+  serialized_pb=b'\n&e2e_pipe/api/e2e_api_layer_proto.proto\x12\x0c\x65\x32\x65_pipe.api\"I\n\nE2eApiData\x12\x0f\n\x05\x61udio\x18\x01 \x01(\x0cH\x00\x12\x0e\n\x04text\x18\x02 \x01(\tH\x00\x12\x12\n\nis_partial\x18\x03 \x01(\x08\x42\x06\n\x04\x64\x61ta\"\x16\n\x14\x45\x32\x65\x41piTextDataFormat\">\n\x15\x45\x32\x65\x41piAudioDataFormat\x12\x13\n\x0bsample_rate\x18\x01 \x01(\r\x12\x10\n\x08\x63hannels\x18\x02 \x01(\r\"\xab\x01\n\x10\x45\x32\x65\x41piDataFormat\x12\x15\n\rlanguage_code\x18\x01 \x01(\t\x12\x39\n\x0btext_format\x18\x02 \x01(\x0b\x32\".e2e_pipe.api.E2eApiTextDataFormatH\x00\x12;\n\x0c\x61udio_format\x18\x03 \x01(\x0b\x32#.e2e_pipe.api.E2eApiAudioDataFormatH\x00\x42\x08\n\x06\x66ormat\"\x89\x02\n\x11\x45\x32\x65\x41piInitRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x12\n\ncredential\x18\x02 \x01(\t\x12\'\n\x08\x61pi_type\x18\x03 \x01(\x0e\x32\x15.e2e_pipe.api.ApiType\x12,\n\ntimeliness\x18\x04 \x01(\x0e\x32\x18.e2e_pipe.api.Timeliness\x12:\n\x12source_data_format\x18\x05 \x01(\x0b\x32\x1e.e2e_pipe.api.E2eApiDataFormat\x12:\n\x12target_data_format\x18\x06 \x01(\x0b\x32\x1e.e2e_pipe.api.E2eApiDataFormat\"o\n\x12\x45\x32\x65\x41piInitResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12.\n\x04type\x18\x02 \x01(\x0e\x32 .e2e_pipe.api.E2eApiResponseType\x12\x15\n\rerror_message\x18\x03 \x01(\t\"P\n\x12\x45\x32\x65\x41piTransRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12&\n\x04\x64\x61ta\x18\x02 \x01(\x0b\x32\x18.e2e_pipe.api.E2eApiData\"\x98\x01\n\x13\x45\x32\x65\x41piTransResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12.\n\x04type\x18\x02 \x01(\x0e\x32 .e2e_pipe.api.E2eApiResponseType\x12\x15\n\rerror_message\x18\x03 \x01(\t\x12&\n\x04\x64\x61ta\x18\x04 \x01(\x0b\x32\x18.e2e_pipe.api.E2eApiData\"?\n\x12\x45\x32\x65\x41piCloseRequest\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12\x15\n\rwait_to_drain\x18\x02 \x01(\x08\"\x98\x01\n\x13\x45\x32\x65\x41piCloseResponse\x12\x12\n\nsession_id\x18\x01 \x01(\t\x12.\n\x04type\x18\x02 \x01(\x0e\x32 .e2e_pipe.api.E2eApiResponseType\x12\x15\n\rerror_message\x18\x03 \x01(\t\x12&\n\x04\x64\x61ta\x18\x04 \x01(\x0b\x32\x18.e2e_pipe.api.E2eApiData*G\n\x07\x41piType\x12\x14\n\x10SPEECH_TO_SPEECH\x10\x00\x12\x12\n\x0eSPEECH_TO_TEXT\x10\x01\x12\x12\n\x0eTEXT_TO_SPEECH\x10\x02*7\n\nTimeliness\x12\x0c\n\x08REALTIME\x10\x00\x12\t\n\x05\x42\x41TCH\x10\x01\x12\x10\n\x0cINTERPRETING\x10\x02*N\n\x12\x45\x32\x65\x41piResponseType\x12\x1c\n\x18\x45\x32\x45_API_RESPONSE_SUCCESS\x10\x00\x12\x1a\n\x16\x45\x32\x45_API_RESPONSE_ERROR\x10\x01\x32\x85\x02\n\rE2eApiService\x12N\n\x07InitE2e\x12\x1f.e2e_pipe.api.E2eApiInitRequest\x1a .e2e_pipe.api.E2eApiInitResponse\"\x00\x12Q\n\x08TransE2e\x12 .e2e_pipe.api.E2eApiTransRequest\x1a!.e2e_pipe.api.E2eApiTransResponse\"\x00\x12Q\n\x08\x43loseE2e\x12 .e2e_pipe.api.E2eApiCloseRequest\x1a!.e2e_pipe.api.E2eApiCloseResponse\"\x00\x62\x06proto3'
 )
 
 _APITYPE = _descriptor.EnumDescriptor(
@@ -48,8 +48,8 @@ _APITYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1211,
-  serialized_end=1282,
+  serialized_start=1231,
+  serialized_end=1302,
 )
 _sym_db.RegisterEnumDescriptor(_APITYPE)
 
@@ -67,15 +67,20 @@ _TIMELINESS = _descriptor.EnumDescriptor(
       type=None,
       create_key=_descriptor._internal_create_key),
     _descriptor.EnumValueDescriptor(
-      name='NON_REALTIME', index=1, number=1,
+      name='BATCH', index=1, number=1,
+      serialized_options=None,
+      type=None,
+      create_key=_descriptor._internal_create_key),
+    _descriptor.EnumValueDescriptor(
+      name='INTERPRETING', index=2, number=2,
       serialized_options=None,
       type=None,
       create_key=_descriptor._internal_create_key),
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1284,
-  serialized_end=1328,
+  serialized_start=1304,
+  serialized_end=1359,
 )
 _sym_db.RegisterEnumDescriptor(_TIMELINESS)
 
@@ -100,8 +105,8 @@ _E2EAPIRESPONSETYPE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=1330,
-  serialized_end=1408,
+  serialized_start=1361,
+  serialized_end=1439,
 )
 _sym_db.RegisterEnumDescriptor(_E2EAPIRESPONSETYPE)
 
@@ -110,7 +115,8 @@ SPEECH_TO_SPEECH = 0
 SPEECH_TO_TEXT = 1
 TEXT_TO_SPEECH = 2
 REALTIME = 0
-NON_REALTIME = 1
+BATCH = 1
+INTERPRETING = 2
 E2E_API_RESPONSE_SUCCESS = 0
 E2E_API_RESPONSE_ERROR = 1
 
@@ -138,6 +144,13 @@ _E2EAPIDATA = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='is_partial', full_name='e2e_pipe.api.E2eApiData.is_partial', index=2,
+      number=3, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -156,7 +169,7 @@ _E2EAPIDATA = _descriptor.Descriptor(
     fields=[]),
   ],
   serialized_start=56,
-  serialized_end=109,
+  serialized_end=129,
 )
 
 
@@ -180,8 +193,8 @@ _E2EAPITEXTDATAFORMAT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=111,
-  serialized_end=133,
+  serialized_start=131,
+  serialized_end=153,
 )
 
 
@@ -219,8 +232,8 @@ _E2EAPIAUDIODATAFORMAT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=135,
-  serialized_end=197,
+  serialized_start=155,
+  serialized_end=217,
 )
 
 
@@ -270,8 +283,8 @@ _E2EAPIDATAFORMAT = _descriptor.Descriptor(
       create_key=_descriptor._internal_create_key,
     fields=[]),
   ],
-  serialized_start=200,
-  serialized_end=371,
+  serialized_start=220,
+  serialized_end=391,
 )
 
 
@@ -337,8 +350,8 @@ _E2EAPIINITREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=374,
-  serialized_end=639,
+  serialized_start=394,
+  serialized_end=659,
 )
 
 
@@ -383,8 +396,8 @@ _E2EAPIINITRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=641,
-  serialized_end=752,
+  serialized_start=661,
+  serialized_end=772,
 )
 
 
@@ -422,8 +435,8 @@ _E2EAPITRANSREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=754,
-  serialized_end=834,
+  serialized_start=774,
+  serialized_end=854,
 )
 
 
@@ -475,8 +488,8 @@ _E2EAPITRANSRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=837,
-  serialized_end=989,
+  serialized_start=857,
+  serialized_end=1009,
 )
 
 
@@ -514,8 +527,8 @@ _E2EAPICLOSEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=991,
-  serialized_end=1054,
+  serialized_start=1011,
+  serialized_end=1074,
 )
 
 
@@ -567,8 +580,8 @@ _E2EAPICLOSERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1057,
-  serialized_end=1209,
+  serialized_start=1077,
+  serialized_end=1229,
 )
 
 _E2EAPIDATA.oneofs_by_name['data'].fields.append(
@@ -689,8 +702,8 @@ _E2EAPISERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=1411,
-  serialized_end=1672,
+  serialized_start=1442,
+  serialized_end=1703,
   methods=[
   _descriptor.MethodDescriptor(
     name='InitE2e',

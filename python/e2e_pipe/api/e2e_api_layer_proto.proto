@@ -14,7 +14,9 @@ enum ApiType {
 enum Timeliness {
     REALTIME = 0;
     // This may mean faster or slower than real-time.
-    NON_REALTIME = 1;
+    BATCH = 1;
+    // This will return partial STT candidate results.
+    INTERPRETING = 2;
 }
 
 message E2eApiData {
@@ -22,6 +24,8 @@ message E2eApiData {
         bytes audio = 1;
         string text = 2;
     }
+
+    bool is_partial = 3;
 }
 
 enum E2eApiResponseType {
@@ -82,7 +86,7 @@ message E2eApiTransResponse {
 message E2eApiCloseRequest {
     string session_id = 1;
 
-    // If true, terminate the session immediately without waiting for the remaining audio data.
+    // If false, terminate the session immediately without waiting for the remaining audio data.
     bool wait_to_drain = 2;
 }
 

@@ -7,37 +7,32 @@ import sys
 from e2e_pipe.api.e2e_api_lib import Xl8E2eApiClient
 
 CHUNK = 2048
+SAMPLE_WIDTH = 2
+SAMPLE_RATE = 16000
 
-if len(sys.argv) < 2:
-    print("Plays a wave file.\n\nUsage: %s filename.wav" % sys.argv[0])
-    sys.exit(-1)
-
-xl8_client = Xl8E2eApiClient("localhost", 17777)
-
-wf = wave.open(sys.argv[1], 'rb')
+xl8_client = Xl8E2eApiClient("localhost", 17777, Xl8E2eApiClient.SPEECH_TO_TEXT)
 
 # instantiate PyAudio (1)
 p = pyaudio.PyAudio()
 
 # open stream (2)
-stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
-                channels=wf.getnchannels(),
-                rate=wf.getframerate(),
-                output=True)
-
-# read data
-data = wf.readframes(CHUNK)
+stream = p.open(format=p.get_format_from_width(SAMPLE_WIDTH),
+                channels=1,
+                rate=SAMPLE_RATE,
+                input=True)
 
 start = time.time()
+data = stream.read(CHUNK)
 
 while len(data) > 0:
     time.sleep(0.03)
-    response = xl8_client.translate(data)
+    response, is_partial = xl8_client.translate(data)
     if response and start:
         print("Latency: ", time.time() - start)
         start = None
-    stream.write(response)
-    data = wf.readframes(CHUNK)
+    if response:
+        print("Translated:", response, is_partial)
+    data = stream.read(CHUNK)
 print("Finished requesting")
 
 response = xl8_client.close()
