@@ -26,6 +26,7 @@ message E2eApiData {
     }
 
     bool is_partial = 3;
+    string original = 4;
 }
 
 enum E2eApiResponseType {

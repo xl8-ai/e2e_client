@@ -10,7 +10,7 @@ CHUNK = 2048
 SAMPLE_WIDTH = 2
 SAMPLE_RATE = 16000
 
-xl8_client = Xl8E2eApiClient("localhost", 17777, source_lang="en", target_lang="ko",
+xl8_client = Xl8E2eApiClient("localhost", 17777, source_lang="en", target_lang="fr",
                              client_id="stt-demo", mode=Xl8E2eApiClient.SPEECH_TO_TEXT)
 
 # instantiate PyAudio (1)
@@ -27,12 +27,12 @@ data = stream.read(CHUNK)
 
 while len(data) > 0:
     time.sleep(0.03)
-    response, is_partial = xl8_client.translate(data)
+    response, original, is_partial = xl8_client.translate(data)
     if response and start:
         print("Latency: ", time.time() - start)
         start = None
     if response:
-        print("Translated:", response, is_partial)
+        print("Translated:", response, original, is_partial)
     data = stream.read(CHUNK)
 print("Finished requesting")
 
