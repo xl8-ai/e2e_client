@@ -1,9 +1,11 @@
 package example;
 
+import e2e_pipe.api.E2EApiLayerProto;
 import e2e_pipe.api.Xl8E2eApiClient;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import javax.sound.sampled.*;
 
@@ -35,15 +37,28 @@ class WavToSpeakerGrpc {
             DataInputStream inFile = new DataInputStream(new FileInputStream(inputPath));
 
             byte[] readBytes = new byte[CHUNK_SIZE];
+            // Skip the WAV header.
+            inFile.read(readBytes, 0, HEADER_SIZE);
             int readLength;
             while (true) {
                 readLength = inFile.read(readBytes);
                 if (readLength < 0) {
                     break;
                 }
-                sourceDataLine.write(readBytes, 0, readLength);
+                byte[] inputBuffer;
+                if (readLength == CHUNK_SIZE) {
+                    inputBuffer = readBytes;
+                } else {
+                    inputBuffer = Arrays.copyOfRange(readBytes, 0, readLength);
+                }
+                E2EApiLayerProto.E2eApiTransResponse response = client.translate(inputBuffer);
+                byte[] outputBuffer = response.getData().getAudio().toByteArray();
+                sourceDataLine.write(outputBuffer, 0, outputBuffer.length);
             }
 
+            E2EApiLayerProto.E2eApiCloseResponse response = client.close();
+            byte[] outputBuffer = response.getData().getAudio().toByteArray();
+            sourceDataLine.write(outputBuffer, 0, outputBuffer.length);
             inFile.close();
 
             // Cleanup

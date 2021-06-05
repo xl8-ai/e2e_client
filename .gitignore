@@ -4,6 +4,9 @@
 ## Then, sync the files using sync.py. If you directly update this file from other repos, they will be overwritten.
 #########################
 
+## Java class files
+*.class
+
 ## Deploy-related files
 .deploy_info.json
 web/static/api-web/latex/scripts/xl8

@@ -136,7 +136,7 @@ public final class Xl8E2eApiClient {
     /**
      * Close the session and return the remaining translated audio.
      */
-    public E2EApiLayerProto.E2eApiCloseResponse close(byte audioData) {
+    public E2EApiLayerProto.E2eApiCloseResponse close() {
         E2EApiLayerProto.E2eApiCloseRequest request = E2EApiLayerProto.E2eApiCloseRequest.newBuilder()
             .setSessionId(this.sessionId)
             .build();
