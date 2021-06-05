@@ -5,6 +5,7 @@ import logging
 import json
 import time
 import threading
+import traceback
 
 import pyaudio
 import wave
@@ -36,7 +37,7 @@ def fetch():
 thread_handle = threading.Thread(target=app.run)
 thread_handle.start()
 
-xl8_client = Xl8E2eApiClient("localhost", 17777, source_lang="en", target_lang="ko",
+xl8_client = Xl8E2eApiClient("3.91.11.232", 17777, source_lang="en", target_lang="ko",
                              client_id="stt-demo", mode=Xl8E2eApiClient.SPEECH_TO_TEXT)
 
 # instantiate PyAudio (1)
@@ -60,7 +61,12 @@ while len(data) > 0:
     if response:
         print(response, original, is_partial)
         result_queue.append({"response": response, "original": original, "is_partial": is_partial})
-    data = stream.read(CHUNK)
+    try:
+        data = stream.read(CHUNK)
+    except:
+        traceback.print_exc()
+        time.sleep(0.3)
+        data = stream.read(CHUNK)
 print("Finished requesting")
 
 response = xl8_client.close()

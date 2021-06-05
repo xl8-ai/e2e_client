@@ -9,10 +9,10 @@ from e2e_pipe.api.e2e_api_lib import Xl8E2eApiClient
 CHUNK = 2048
 
 if len(sys.argv) < 2:
-    print("Plays a wave file.\n\nUsage: %s filename.wav" % sys.argv[0])
+    print("Usage: %s filename.wav" % sys.argv[0])
     sys.exit(-1)
 
-xl8_client = Xl8E2eApiClient("localhost", 17777, source_lang="en", target_lang="ko", client_id="sis")
+xl8_client = Xl8E2eApiClient("3.91.11.232", 17777, source_lang="en", target_lang="ko", client_id="sis", api_key="sis")
 
 wf = wave.open(sys.argv[1], 'rb')
 

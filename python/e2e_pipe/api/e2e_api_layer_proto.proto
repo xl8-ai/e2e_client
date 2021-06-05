@@ -12,6 +12,7 @@ enum ApiType {
 }
 
 enum Timeliness {
+    // Realtime use-case. Typically the response has a <3 seconds delay.
     REALTIME = 0;
     // This may mean faster or slower than real-time.
     BATCH = 1;
@@ -25,7 +26,11 @@ message E2eApiData {
         string text = 2;
     }
 
+    // True if the result is a partial result which can be replaced by a final (non-partial) result.
+    // Used only for text data.
     bool is_partial = 3;
+
+    // The original text before translation. Used only for text data.
     string original = 4;
 }
 
@@ -43,19 +48,29 @@ message E2eApiAudioDataFormat {
 }
 
 message E2eApiDataFormat {
+    // An ISO 639-1 two-letter language code.
     string language_code = 1;
+
     oneof format {
         E2eApiTextDataFormat text_format = 2;
         E2eApiAudioDataFormat audio_format = 3;
     }
 }
 
+message E2eApiError {
+    string error_code = 1;
+
+    // An optional detailed error message.
+    string error_message = 2;
+}
+
 message E2eApiInitRequest {
     string client_id = 1;
-    string credential = 2;
+    string api_key = 2;
     ApiType api_type = 3;
     Timeliness timeliness = 4;
 
+    // Note that not all the formats are supported.
     E2eApiDataFormat source_data_format = 5;
     E2eApiDataFormat target_data_format = 6;
 }
@@ -64,8 +79,8 @@ message E2eApiInitResponse {
     string session_id = 1;
 
     E2eApiResponseType type = 2;
-    // The detailed error message filled only when type == E2eApiResponseType.E2E_API_RESPONSE_ERROR.
-    string error_message = 3;
+    // The detailed error filled only when type == E2eApiResponseType.E2E_API_RESPONSE_ERROR.
+    E2eApiError error = 3;
 }
 
 message E2eApiTransRequest {
@@ -78,8 +93,8 @@ message E2eApiTransResponse {
     string session_id = 1;
 
     E2eApiResponseType type = 2;
-    // The detailed error message filled only when type == E2eApiResponseType.E2E_API_RESPONSE_ERROR.
-    string error_message = 3;
+    // The detailed error filled only when type == E2eApiResponseType.E2E_API_RESPONSE_ERROR.
+    E2eApiError error = 3;
 
     E2eApiData data = 4;
 }
@@ -95,9 +110,10 @@ message E2eApiCloseResponse {
     string session_id = 1;
 
     E2eApiResponseType type = 2;
-    // The detailed error message filled only when type == E2eApiResponseType.E2E_API_RESPONSE_ERROR.
-    string error_message = 3;
+    // The detailed error filled only when type == E2eApiResponseType.E2E_API_RESPONSE_ERROR.
+    E2eApiError error = 3;
 
+    // The remaining data from the server.
     E2eApiData data = 4;
 }
 
