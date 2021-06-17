@@ -37,7 +37,7 @@ def fetch():
 thread_handle = threading.Thread(target=app.run)
 thread_handle.start()
 
-xl8_client = Xl8E2eApiClient("3.91.11.232", 17777, source_lang="ko", target_lang="en",
+xl8_client = Xl8E2eApiClient("3.91.11.232", 17777, source_lang="en", target_lang="ar",
                              client_id="non-sis", mode=Xl8E2eApiClient.SPEECH_TO_TEXT, api_key="")
 
 # instantiate PyAudio (1)

@@ -19,7 +19,7 @@ function appendMessage(name, img, side, text) {
           <div class="msg-info-time">${formatDate(new Date())}</div>
         </div>
 
-        <div class="msg-text">${text}</div>
+        <div class="msg-text" dir="rtl">${text}</div>
       </div>
     </div>
   `;
