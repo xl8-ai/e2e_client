@@ -12,7 +12,7 @@ import wave
 import sys
 from e2e_pipe.api.e2e_api_lib import Xl8E2eApiClient
 
-CHUNK = 2048
+CHUNK = 4096
 SAMPLE_WIDTH = 2
 SAMPLE_RATE = 16000
 
@@ -37,23 +37,20 @@ def fetch():
 thread_handle = threading.Thread(target=app.run)
 thread_handle.start()
 
-xl8_client = Xl8E2eApiClient("3.91.11.232", 17777, source_lang="en", target_lang="ko",
-                             client_id="stt-demo", mode=Xl8E2eApiClient.SPEECH_TO_TEXT)
+xl8_client = Xl8E2eApiClient("3.91.11.232", 17777, source_lang="ko", target_lang="en",
+                             client_id="non-sis", mode=Xl8E2eApiClient.SPEECH_TO_TEXT, api_key="")
 
 # instantiate PyAudio (1)
 p = pyaudio.PyAudio()
 
 # open stream (2)
-stream = p.open(format=p.get_format_from_width(SAMPLE_WIDTH),
-                channels=1,
-                rate=SAMPLE_RATE,
-                input=True)
+stream = p.open(format=p.get_format_from_width(SAMPLE_WIDTH), channels=1, rate=SAMPLE_RATE, input=True)
 
 start = time.time()
-data = stream.read(CHUNK)
+data = stream.read(CHUNK, exception_on_overflow=False)
 
 while len(data) > 0:
-    time.sleep(0.03)
+    time.sleep(0.02)
     response, original, is_partial = xl8_client.translate(data)
     if response and start:
         print("Latency: ", time.time() - start)
@@ -62,11 +59,11 @@ while len(data) > 0:
         print(response, original, is_partial)
         result_queue.append({"response": response, "original": original, "is_partial": is_partial})
     try:
-        data = stream.read(CHUNK)
+        data = stream.read(CHUNK, exception_on_overflow=False)
     except:
         traceback.print_exc()
         time.sleep(0.3)
-        data = stream.read(CHUNK)
+        data = stream.read(CHUNK, exception_on_overflow=False)
 print("Finished requesting")
 
 response = xl8_client.close()

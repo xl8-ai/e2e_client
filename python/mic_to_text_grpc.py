@@ -23,7 +23,7 @@ stream = p.open(format=p.get_format_from_width(SAMPLE_WIDTH),
                 input=True)
 
 start = time.time()
-data = stream.read(CHUNK)
+data = stream.read(CHUNK, exception_on_overflow=False)
 
 while len(data) > 0:
     time.sleep(0.03)
@@ -33,7 +33,7 @@ while len(data) > 0:
         start = None
     if response:
         print("Translated:", response, original, is_partial)
-    data = stream.read(CHUNK)
+    data = stream.read(CHUNK, exception_on_overflow=False)
 print("Finished requesting")
 
 response = xl8_client.close()
