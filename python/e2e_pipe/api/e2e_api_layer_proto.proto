@@ -32,6 +32,9 @@ message E2eApiData {
 
     // The original text before translation. Used only for text data.
     string original = 4;
+
+    uint64 time_start_msec = 5;
+    uint64 time_end_msec = 6;
 }
 
 enum E2eApiResponseType {
@@ -50,6 +53,11 @@ message E2eApiAudioDataFormat {
 message E2eApiDataFormat {
     // An ISO 639-1 two-letter language code.
     string language_code = 1;
+
+    // Additional languages. If this was for a source audio format, these languages may appear in the source audio
+    // in addition to the language_code, which is the main language spoken in the audio. If this was for a target text
+    // format, these languages are additional languages the content will be translated to.
+    repeated string additional_language_code = 4;
 
     oneof format {
         E2eApiTextDataFormat text_format = 2;

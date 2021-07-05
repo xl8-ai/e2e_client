@@ -37,8 +37,12 @@ def fetch():
 thread_handle = threading.Thread(target=app.run)
 thread_handle.start()
 
-xl8_client = Xl8E2eApiClient("3.91.11.232", 17777, source_lang="ko", target_lang="en",
-                             client_id="non-sis", mode=Xl8E2eApiClient.SPEECH_TO_TEXT, api_key="")
+#xl8_client = Xl8E2eApiClient("54.145.36.124", 17777, source_lang="ko", target_lang="en",
+#                             client_id="setplex", mode=Xl8E2eApiClient.SPEECH_TO_TEXT, api_key="")
+xl8_client = Xl8E2eApiClient("3.91.11.232", 17777, source_lang="en", target_lang="ar",
+                             client_id="sis", mode=Xl8E2eApiClient.SPEECH_TO_TEXT, api_key="")
+#xl8_client = Xl8E2eApiClient("127.0.0.1", 17777, source_lang="ko", target_lang="en",
+#                             client_id="setplex", mode=Xl8E2eApiClient.SPEECH_TO_TEXT, api_key="")
 
 # instantiate PyAudio (1)
 p = pyaudio.PyAudio()
@@ -51,12 +55,12 @@ data = stream.read(CHUNK, exception_on_overflow=False)
 
 while len(data) > 0:
     time.sleep(0.02)
-    response, original, is_partial = xl8_client.translate(data)
+    response, original, is_partial, time_start_msec, time_end_msec = xl8_client.translate(data)
     if response and start:
         print("Latency: ", time.time() - start)
         start = None
     if response:
-        print(response, original, is_partial)
+        print(response, original, is_partial, time_start_msec, time_end_msec)
         result_queue.append({"response": response, "original": original, "is_partial": is_partial})
     try:
         data = stream.read(CHUNK, exception_on_overflow=False)

@@ -45,7 +45,7 @@ class Xl8E2eApiClient:
         self.session_id = response.session_id
         self.mode = mode
 
-    def translate(self, audio_data: bytes) -> Union[bytes, Tuple[str, str, bool]]:
+    def translate(self, audio_data: bytes) -> Union[bytes, Tuple[str, str, bool, int, int]]:
         """Translate an input audio chunk and return a translated audio chunk."""
         request = E2eApiTransRequest(session_id=self.session_id)
         request.data.audio = audio_data
@@ -56,7 +56,7 @@ class Xl8E2eApiClient:
 
         if self.mode == Xl8E2eApiClient.SPEECH_TO_SPEECH:
             return response.data.audio
-        return response.data.text, response.data.original, response.data.is_partial
+        return response.data.text, response.data.original, response.data.is_partial, response.data.time_start_msec, response.data.time_end_msec
 
     def close(self, wait_to_drain: bool = True) -> bytes:
         """Close the session and return the remaining translated audio."""
