@@ -1,0 +1,3 @@
+# PROJECT LANGUAGE PATH OPTIONS
+e2e_api python python/
+e2e_api java java/src/main/java/
