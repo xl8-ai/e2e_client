@@ -7,12 +7,12 @@
 usage() {
     echo "Usage: ./fetch_proto.sh [OPTIONS]"
     echo ""
-    echo "Fetches the protobuf files as specified in .xl8_proto configuration file."
+    echo "Fetches the protobuf files as specified in .xl8_proto_dedendencies configuration file."
     echo ""
     echo "Options:"
     echo "    -b, --branch alex/feature    Download files built from another branch. (Default: master)"
     echo ""
-    echo "Sample .xl8_proto file:"
+    echo "Sample .xl8_proto_dedendencies file:"
     echo "    # PROJECT LANGUAGE PATH OPTIONS"
     echo "    e2e_pipe python e2e_pipe/api/"
     echo "    e2e_pipe proto proto/ junk-paths"
@@ -41,8 +41,8 @@ while [ "$1" != "" ]; do
     shift
 done
 
-if [ ! -f .xl8_proto ]; then
-    echo "Please create .xl8_proto file first!"
+if [ ! -f .xl8_proto_dedendencies ]; then
+    echo "Please create .xl8_proto_dedendencies file first!"
     echo ""
     usage
     exit 1
@@ -78,7 +78,7 @@ fetch() {
     echo ""
 }
 
-cat .xl8_proto | while read line || [ -n "$line" ]
+cat .xl8_proto_dedendencies | while read line || [ -n "$line" ]
 do
     case $line in
         "#"*) continue ;;
