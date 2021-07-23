@@ -19,7 +19,10 @@ debug_tools/
 .DS_Store
 
 ## Protobuf-generated files
-*_pb2*.py
+*_pb2.py
+*_pb2_grpc.py
+java/src/main/java/e2e_pipe/api/E2EApiLayerProto.java
+java/src/main/java/e2e_pipe/api/E2eApiServiceGrpc.java
 
 ## JetBrain-specific patterns
 # files and directories created by development environments
