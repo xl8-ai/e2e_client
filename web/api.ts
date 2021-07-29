@@ -15,12 +15,17 @@ interface TransResponse {
   };
 }
 
-const API_ENDPOINT = "http://3.91.88.129/v1/e2e/";
+const DEFAULT_ENDPOINT = "https://1mil.worker.xl8.ai/v1/e2e/";
+let API_ENDPOINT = DEFAULT_ENDPOINT;
 
-export const initE2E = async () => {
+export const setupEndpoint = (endpoint: string) => {
+  API_ENDPOINT = endpoint;
+};
+
+export const initE2E = async (clientId: string, apiKey: string) => {
   const resp = await axios.post<InitResponse>(API_ENDPOINT + "init", {
-    client_id: "sis",
-    api_key: "sis",
+    client_id: clientId,
+    api_key: apiKey,
     api_type: "SPEECH_TO_TEXT",
     timeliness: "INTERPRETING",
     source_data_format: {
