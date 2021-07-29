@@ -85,7 +85,7 @@ async function onRecordDataAvailable(blob: Blob) {
 
 console.log("init");
 
-initE2E("sis", "sis").then((id) => {
+initE2E("demo", "demo").then((id) => {
   console.log(`got session id ${id}`);
   SESSION_ID = id;
   captureMicrophone(function (mic) {
