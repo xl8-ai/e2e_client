@@ -17,32 +17,34 @@ class Xl8E2eApiClient:
     SPEECH_TO_TEXT = 2
 
     def __init__(self, address: str, port: int, source_lang: str, target_lang: str,
-                 client_id: str, api_key: str, mode: int = SPEECH_TO_SPEECH) -> None:
+                 client_id: str, api_key: str, mode: int = SPEECH_TO_SPEECH, session_id: str = None) -> None:
         """Initialize E2eApiClient."""
         channel = grpc.insecure_channel(f"{address}:{port}")
         self.stub = E2eApiServiceStub(channel)
-        if mode == Xl8E2eApiClient.SPEECH_TO_SPEECH:
-            request = E2eApiInitRequest(client_id=client_id, api_type=ApiType.SPEECH_TO_SPEECH, timeliness=Timeliness.REALTIME)
-            request.target_data_format.audio_format.sample_rate = 16000
-            request.target_data_format.audio_format.channels = 1
-        elif mode == Xl8E2eApiClient.SPEECH_TO_TEXT:
-            timeliness = Timeliness.INTERPRETING
-            if client_id == "setplex":
-                timeliness = Timeliness.BATCH
-            request = E2eApiInitRequest(client_id=client_id, api_type=ApiType.SPEECH_TO_TEXT, timeliness=timeliness)
-        else:
-            raise RuntimeError(f"Invalid mode: {mode}")
+        if not session_id:
+            if mode == Xl8E2eApiClient.SPEECH_TO_SPEECH:
+                request = E2eApiInitRequest(client_id=client_id, api_type=ApiType.SPEECH_TO_SPEECH, timeliness=Timeliness.REALTIME)
+                request.target_data_format.audio_format.sample_rate = 16000
+                request.target_data_format.audio_format.channels = 1
+            elif mode == Xl8E2eApiClient.SPEECH_TO_TEXT:
+                timeliness = Timeliness.INTERPRETING
+                if client_id == "setplex":
+                    timeliness = Timeliness.BATCH
+                request = E2eApiInitRequest(client_id=client_id, api_type=ApiType.SPEECH_TO_TEXT, timeliness=timeliness)
+            else:
+                raise RuntimeError(f"Invalid mode: {mode}")
 
-        request.source_data_format.language_code = source_lang
-        request.source_data_format.audio_format.sample_rate = 16000
-        request.source_data_format.audio_format.channels = 1
-        request.target_data_format.language_code = target_lang
-        request.api_key = api_key
+            request.source_data_format.language_code = source_lang
+            request.source_data_format.audio_format.sample_rate = 16000
+            request.source_data_format.audio_format.channels = 1
+            request.target_data_format.language_code = target_lang
+            request.api_key = api_key
 
-        response = self.stub.InitE2e(request)
-        if response.type != E2eApiResponseType.E2E_API_RESPONSE_SUCCESS:
-            raise RuntimeError("Error while initializing: " + response.error.error_message)
-        self.session_id = response.session_id
+            response = self.stub.InitE2e(request)
+            if response.type != E2eApiResponseType.E2E_API_RESPONSE_SUCCESS:
+                raise RuntimeError("Error while initializing: " + response.error.error_message)
+            session_id = response.session_id
+        self.session_id = session_id
         self.mode = mode
 
     def translate(self, audio_data: bytes) -> Union[bytes, Tuple[str, str, bool, int, int]]:

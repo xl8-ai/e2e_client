@@ -12,6 +12,7 @@ let audio: HTMLAudioElement = document.querySelector("audio")!;
 let recorder: RecordRTC | null;
 let SESSION_ID = "";
 let wasLastMessagePartial = false;
+let dataToSend: Array<string> = [];
 
 function captureMicrophone(callback: onMicrophone) {
   if (
@@ -66,6 +67,26 @@ function startRecording(microphone: MediaStream) {
 
 async function onRecordDataAvailable(blob: Blob) {
   const base64Data = (await blobToBase64(blob)) as string;
+  dataToSend.push(base64Data);
+}
+
+console.log("Initialize XL8 Skroll E2E client...");
+
+initE2E("demo", "demo").then((id) => {
+  console.log(`got session id ${id}`);
+  SESSION_ID = id;
+  captureMicrophone(function (mic) {
+    startRecording(mic);
+  });
+});
+
+async function sendData() {
+  //Speech data has to be sent in order.
+  const base64Data = dataToSend.shift();
+  if (!base64Data) {
+    return;
+  }
+
   const resp = await transE2E(SESSION_ID, base64Data);
   if (!resp.data || !resp.data.text) {
     return;
@@ -83,12 +104,4 @@ async function onRecordDataAvailable(blob: Blob) {
   wasLastMessagePartial = resp.data.is_partial || false;
 }
 
-console.log("init");
-
-initE2E("demo", "demo").then((id) => {
-  console.log(`got session id ${id}`);
-  SESSION_ID = id;
-  captureMicrophone(function (mic) {
-    startRecording(mic);
-  });
-});
+setInterval(sendData, 500);
