@@ -70,7 +70,7 @@ async function onRecordDataAvailable(blob: Blob) {
   dataToSend.push(base64Data);
 }
 
-console.log("init");
+console.log("Initialize XL8 Skroll E2E client...");
 
 initE2E("demo", "demo").then((id) => {
   console.log(`got session id ${id}`);
@@ -81,6 +81,7 @@ initE2E("demo", "demo").then((id) => {
 });
 
 async function sendData() {
+  //Speech data has to be sent in order.
   const base64Data = dataToSend.shift();
   if (!base64Data) {
     return;
