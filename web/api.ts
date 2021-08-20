@@ -15,7 +15,7 @@ interface TransResponse {
   };
 }
 
-const DEFAULT_ENDPOINT = "https://1mil.worker.xl8.ai/v1/e2e/";
+const DEFAULT_ENDPOINT = "https://poc1.worker.xl8.ai/v1/e2e/";
 let API_ENDPOINT = DEFAULT_ENDPOINT;
 
 export const setupEndpoint = (endpoint: string) => {
