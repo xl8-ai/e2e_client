@@ -1,5 +1,5 @@
 import RecordRTC, { StereoAudioRecorder } from "recordrtc";
-import { initE2E, transE2E } from "./api";
+import { initE2E, transE2E, closeE2E } from "./api";
 import { findLastMessageElement, appendMessage, scrollMessages } from "./html";
 import { blobToBase64 } from "./utils";
 
@@ -78,6 +78,11 @@ initE2E("demo", "demo").then((id) => {
   captureMicrophone(function (mic) {
     startRecording(mic);
   });
+  window.onbeforeunload = function () {
+    clearInterval(intervalId);
+    closeE2E(id, false);
+    return "Do you really want to close?";
+  };
 });
 
 async function sendData() {
@@ -104,4 +109,4 @@ async function sendData() {
   wasLastMessagePartial = resp.data.is_partial || false;
 }
 
-setInterval(sendData, 500);
+let intervalId = setInterval(sendData, 500);

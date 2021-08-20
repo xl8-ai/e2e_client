@@ -4,6 +4,10 @@ interface InitResponse {
   session_id: string;
 }
 
+interface CloseResponse {
+  session_id: string;
+}
+
 interface TransResponse {
   session_id: string;
   data: {
@@ -55,4 +59,11 @@ export const transE2E = async (sessionId: string, base64Data: string) => {
   });
 
   return resp.data;
+};
+
+export const closeE2E = async (sessionId: string, waitToDrain: boolean) => {
+  const resp = await axios.post<CloseResponse>(API_ENDPOINT + "close", {
+    session_id: sessionId,
+    wait_to_drain: waitToDrain,
+  });
 };
