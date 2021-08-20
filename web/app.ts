@@ -80,7 +80,7 @@ initE2E("demo", "demo").then((id) => {
   });
   window.onbeforeunload = function () {
     clearInterval(intervalId);
-    closeE2E(id, true);
+    closeE2E(id, false);
     return "Do you really want to close?";
   };
 });
