@@ -23,7 +23,7 @@ parser.add_argument("--session_id", dest="session_id", default=None, help="Attac
 args = parser.parse_args()
 
 xl8_client = Xl8E2eApiClient(
-    args.host, args.port, 
+    args.host, args.port,
     source_lang=args.source_lang, target_lang=args.target_lang,
     client_id=args.client_id, api_key=args.api_key,
     mode=Xl8E2eApiClient.SPEECH_TO_TEXT, timeliness=Xl8E2eApiClient.INTERPRETING,
@@ -35,24 +35,28 @@ print("Connected to the server.")
 queues = []
 lock = threading.Lock()
 terminated = False
-def record_thread():
-    # instantiate PyAudio (1)
-    p = pyaudio.PyAudio()
-    # open stream (2)
-    stream = p.open(format=p.get_format_from_width(SAMPLE_WIDTH),
-                    channels=1,
-                    rate=SAMPLE_RATE,
-                    input=True)
+
+
+def read_from_microphone():
+    """Retrieve audio from microphone."""
+    audio = pyaudio.PyAudio()
+    stream = audio.open(
+        format=audio.get_format_from_width(SAMPLE_WIDTH),
+        channels=1,
+        rate=SAMPLE_RATE,
+        input=True
+    )
     print("Microphone is now recording.")
     while not terminated:
         data = stream.read(CHUNK, exception_on_overflow=False)
         with lock:
             queues.append(data)
-    
-    p.terminate()
 
-t = threading.Thread(target=record_thread)
-t.start()
+    audio.terminate()
+
+
+record_thread = threading.Thread(target=read_from_microphone)
+record_thread.start()
 start = time.time()
 
 try:
@@ -82,4 +86,4 @@ print("Waiting for remaining data...")
 response = xl8_client.close()
 if response.text:
     print(f'[{"     " if response.is_partial else "Final"}] {response.text} ({response.original})')
-t.join()
+record_thread.join()
