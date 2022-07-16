@@ -19,15 +19,25 @@ parser.add_argument("--port", dest="port", default=17777, type=int, help="Server
 parser.add_argument("--source", dest="source_lang", default="en", help="Source language. (default: en)")
 parser.add_argument("--target", dest="target_lang", default="ko", help="Target language. (default: ko)")
 parser.add_argument("--session_id", dest="session_id", default=None, help="Attach to an existing session.")
+parser.add_argument("--token", dest="user_token", default=None, help="User token.")
+parser.add_argument(
+    "--max_sentence_duration", dest="max_sentence_duration", default=10, help="Maximum duration of a sentence."
+)
 
 args = parser.parse_args()
 
 xl8_client = Xl8E2eApiClient(
-    args.host, args.port,
-    source_lang=args.source_lang, target_lang=args.target_lang,
-    client_id=args.client_id, api_key=args.api_key,
-    mode=Xl8E2eApiClient.SPEECH_TO_TEXT, timeliness=Xl8E2eApiClient.INTERPRETING,
+    args.host,
+    args.port,
+    source_lang=args.source_lang,
+    target_langs=args.target_lang.split(","),
+    client_id=args.client_id,
+    api_key=args.api_key,
+    mode=Xl8E2eApiClient.SPEECH_TO_TEXT,
+    timeliness=Xl8E2eApiClient.INTERPRETING,
     session_id=args.session_id,
+    user_token=args.user_token,
+    max_sentence_duration=args.max_sentence_duration,
 )
 
 print("Connected to the server.")
@@ -40,12 +50,7 @@ terminated = False
 def read_from_microphone():
     """Retrieve audio from microphone."""
     audio = pyaudio.PyAudio()
-    stream = audio.open(
-        format=audio.get_format_from_width(SAMPLE_WIDTH),
-        channels=1,
-        rate=SAMPLE_RATE,
-        input=True
-    )
+    stream = audio.open(format=audio.get_format_from_width(SAMPLE_WIDTH), channels=1, rate=SAMPLE_RATE, input=True)
     print("Microphone is now recording.")
     while not terminated:
         data = stream.read(CHUNK, exception_on_overflow=False)
@@ -65,7 +70,7 @@ try:
     while True:
         if queues:
             with lock:
-                data = b''.join(queues)
+                data = b"".join(queues)
                 queues.clear()
             total_sent += len(data)
             response = xl8_client.translate(data)
@@ -73,7 +78,9 @@ try:
                 print("Latency: ", time.time() - start)
                 start = None
             if response.text:
-                print(f'[{"     " if response.is_partial else "Final"}] {response.text} ({response.original})')
+                print(
+                    f'[{"     " if response.is_partial else "Final"}] {response.multilingual_text} ({response.original})'
+                )
         else:
             time.sleep(0.05)
 except KeyboardInterrupt:
@@ -85,5 +92,5 @@ print("Waiting for remaining data...")
 
 response = xl8_client.close()
 if response.text:
-    print(f'[{"     " if response.is_partial else "Final"}] {response.text} ({response.original})')
+    print(f'[{"     " if response.is_partial else "Final"}] {response.multilingual_text} ({response.original})')
 record_thread.join()

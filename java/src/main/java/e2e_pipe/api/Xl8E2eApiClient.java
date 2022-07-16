@@ -24,6 +24,10 @@ public final class Xl8E2eApiClient {
     public static final int SPEECH_TO_SPEECH = E2EApiLayerProto.ApiType.SPEECH_TO_SPEECH.getNumber();
     public static final int SPEECH_TO_TEXT = E2EApiLayerProto.ApiType.SPEECH_TO_TEXT.getNumber();
 
+    public static final int REALTIME = E2EApiLayerProto.Timeliness.REALTIME.getNumber();
+    public static final int BATCH = E2EApiLayerProto.Timeliness.BATCH.getNumber();
+    public static final int INTERPRETING = E2EApiLayerProto.Timeliness.INTERPRETING.getNumber();
+
     private String sessionId;
     private int mode;
 
@@ -32,17 +36,18 @@ public final class Xl8E2eApiClient {
      */
 
     public Xl8E2eApiClient(String address, int port, String sourceLang, String targetLang,
-                           String clientId, String apiKey) {
-        this(address, port, sourceLang, targetLang, clientId, apiKey, Xl8E2eApiClient.SPEECH_TO_SPEECH);
-    }
-
-    public Xl8E2eApiClient(String address, int port, String sourceLang, String targetLang,
                            String clientId, String apiKey, int mode) {
+        this(
+            address, port, sourceLang, targetLang, clientId, apiKey, mode, 
+            (mode == Xl8E2eApiClient.SPEECH_TO_SPEECH) ? Xl8E2eApiClient.REALTIME : Xl8E2eApiClient.INTERPRETING
+        );
+    }
+    public Xl8E2eApiClient(String address, int port, String sourceLang, String targetLang,
+                           String clientId, String apiKey, int mode, int timeliness) {
         // Create a communication channel to the server, known as a Channel. Channels are thread-safe
         // and reusable. It is common to create channels at the beginning of your application and reuse
         // them until the application shuts down.
         String target = address + ":" + port;
-        System.out.println("Target: " + target);
         ManagedChannel channel = ManagedChannelBuilder.forTarget(target)
             // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
             // needing certificates.
@@ -58,7 +63,7 @@ public final class Xl8E2eApiClient {
                 .setClientId(clientId)
                 .setApiKey(apiKey)
                 .setApiType(E2EApiLayerProto.ApiType.SPEECH_TO_SPEECH)
-                .setTimeliness(E2EApiLayerProto.Timeliness.REALTIME)
+                .setTimeliness(E2EApiLayerProto.Timeliness.valueOf(timeliness))
                 .setSourceDataFormat(
                     E2EApiLayerProto.E2eApiDataFormat.newBuilder()
                         .setLanguageCode(sourceLang)
@@ -84,7 +89,7 @@ public final class Xl8E2eApiClient {
                 .setClientId(clientId)
                 .setApiKey(apiKey)
                 .setApiType(E2EApiLayerProto.ApiType.SPEECH_TO_TEXT)
-                .setTimeliness(E2EApiLayerProto.Timeliness.INTERPRETING)
+                .setTimeliness(E2EApiLayerProto.Timeliness.valueOf(timeliness))
                 .setSourceDataFormat(
                     E2EApiLayerProto.E2eApiDataFormat.newBuilder()
                         .setLanguageCode(sourceLang)

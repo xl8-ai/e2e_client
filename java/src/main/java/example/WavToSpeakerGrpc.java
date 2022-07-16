@@ -13,13 +13,14 @@ import javax.sound.sampled.*;
 class WavToSpeakerGrpc {
     static int HEADER_SIZE = 44; // There are 44 bits before the data section
     static int CHUNK_SIZE = 2048;
+    static String SERVER_HOST = "127.0.0.1" 
 
     public static void main(String[] args) {
         if (args.length < 1) {
             throw new RuntimeException("Usage: java [filename]");
         }
 
-        Xl8E2eApiClient client = new Xl8E2eApiClient("3.91.11.232", 17777, "en", "ko", "sis", "sis-cred");
+        Xl8E2eApiClient client = new Xl8E2eApiClient(SERVER_HOST, 17777, "en", "ko", "demo", "demo", Xl8E2eApiClient.SPEECH_TO_SPEECH);
 
         // Setup audio play.
         AudioFormat audioFormat = new AudioFormat(16000, 16, 1, true, false);

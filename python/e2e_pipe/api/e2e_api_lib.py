@@ -1,5 +1,7 @@
 """This sample client reads from a wav file, translates it through XL8 E2E API, and plays the result to the speaker."""
 from dataclasses import dataclass
+from typing import Dict
+from typing import List
 from typing import Optional
 from typing import Union
 
@@ -12,6 +14,7 @@ from e2e_pipe.api.e2e_api_layer_proto_pb2 import E2eApiTransRequest
 from e2e_pipe.api.e2e_api_layer_proto_pb2 import Timeliness
 from e2e_pipe.api.e2e_api_layer_proto_pb2_grpc import E2eApiServiceStub
 
+
 @dataclass
 class Xl8E2eApiTextResponse:
     text: str
@@ -19,6 +22,8 @@ class Xl8E2eApiTextResponse:
     is_partial: bool = False
     time_start_msec: int = 0
     time_end_msec: int = 0
+    multilingual_text: Dict[str, str] = None
+
 
 class Xl8E2eApiClient:
     """A end-to-end translation client."""
@@ -31,16 +36,19 @@ class Xl8E2eApiClient:
     INTERPRETING = Timeliness.INTERPRETING
 
     def __init__(
-            self,
-            address: str,
-            port: int,
-            source_lang: str = "",
-            target_lang: str = "",
-            client_id: str = "",
-            api_key: str = "",
-            mode: int = SPEECH_TO_SPEECH,
-            timeliness: Optional[int] = None,
-            session_id: str = None,
+        self,
+        address: str,
+        port: int,
+        source_lang: str = "",
+        target_lang: str = "",
+        client_id: str = "",
+        api_key: str = "",
+        mode: int = SPEECH_TO_SPEECH,
+        timeliness: Optional[int] = None,
+        session_id: Optional[str] = None,
+        target_langs: Optional[List[str]] = None,
+        max_sentence_duration: Optional[int] = None,
+        user_token: Optional[str] = None,
     ) -> None:
         """Initialize E2eApiClient."""
         channel = grpc.insecure_channel(f"{address}:{port}")
@@ -50,8 +58,12 @@ class Xl8E2eApiClient:
             request.source_data_format.language_code = source_lang
             request.source_data_format.audio_format.sample_rate = 16000
             request.source_data_format.audio_format.channels = 1
-            request.target_data_format.language_code = target_lang
-            
+            if target_langs:
+                request.target_data_format.language_code = target_langs[0]
+                request.target_data_format.additional_language_code.extend(target_langs[1:])
+            else:
+                request.target_data_format.language_code = target_lang
+
             if mode == Xl8E2eApiClient.SPEECH_TO_SPEECH:
                 request.api_type = ApiType.SPEECH_TO_SPEECH
                 request.timeliness = Timeliness.REALTIME if timeliness is None else timeliness
@@ -63,7 +75,10 @@ class Xl8E2eApiClient:
             else:
                 raise RuntimeError(f"Invalid mode: {mode}")
 
+            if user_token:
+                request.user_token = user_token
             request.api_key = api_key
+            request.max_sentence_duration = max_sentence_duration
 
             response = self.stub.InitE2e(request)
             if response.type != E2eApiResponseType.E2E_API_RESPONSE_SUCCESS:
@@ -90,10 +105,11 @@ class Xl8E2eApiClient:
             text=response.data.text,
             original=response.data.original,
             is_partial=response.data.is_partial,
-            time_start_msec=response.data.time_start_msec, 
-            time_end_msec=response.data.time_end_msec
+            time_start_msec=response.data.time_start_msec,
+            time_end_msec=response.data.time_end_msec,
+            multilingual_text=response.data.multilingual_text,
         )
-        
+
     def close(self, wait_to_drain: bool = True) -> Union[bytes, Xl8E2eApiTextResponse]:
         """Close the session and return the remaining translated audio."""
         request = E2eApiCloseRequest(session_id=self.session_id, wait_to_drain=wait_to_drain)
@@ -109,6 +125,6 @@ class Xl8E2eApiClient:
             text=response.data.text,
             original=response.data.original,
             is_partial=response.data.is_partial,
-            time_start_msec=response.data.time_start_msec, 
-            time_end_msec=response.data.time_end_msec
+            time_start_msec=response.data.time_start_msec,
+            time_end_msec=response.data.time_end_msec,
         )
